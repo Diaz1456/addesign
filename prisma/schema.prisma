@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+}
+
+model Product {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String      @unique
+  description String
+  price       Float
+  category    String
+  imageUrls   String[]
+  featured    Boolean     @default(false)
+  stock       Int         @default(10)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  OrderItem   OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String   @db.ObjectId
+  quantity  Int
+  price     Float
+}
+
+model Order {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  customerName  String
+  customerEmail String
+  customerPhone String?
+  address       String
+  city          String
+  country       String
+  postalCode    String?
+  items         OrderItem[]
+  subtotal      Float
+  shipping      Float
+  tax           Float
+  total         Float
+  status        String      @default("PENDING") // PENDING | COMPLETED | CANCELLED
+  createdAt     DateTime    @default(now())
+}
+
+model Feedback {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  subject   String?
+  message   String
+  status    String   @default("OPEN") // OPEN | READ | RESOLVED
+  createdAt DateTime @default(now())
+}
+
+model Analytics {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  pageUrl   String
+  sessionId String
+  timestamp DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([timestamp])
+}

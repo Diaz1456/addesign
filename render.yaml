@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: aetheria-designs
+    runtime: node
+    plan: free
+    buildCommand: npx prisma generate && npx prisma db push && npm run db:seed && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aetheria-mongo
+          property: connectionString
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: SEED_ADMIN_EMAIL
+        value: admin@aetheria.design
+      - key: SEED_ADMIN_PASSWORD
+        generateValue: true
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: NEXT_PUBLIC_CLOUDINARY_ENABLED
+        value: "true"
+
+databases:
+  - name: aetheria-mongo
+    databaseName: aetheria
+    plan: free

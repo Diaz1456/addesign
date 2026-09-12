@@ -1,0 +1,72 @@
+:root {
+  --font-inter: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-snow text-slate antialiased;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-orange text-white hover:bg-brand-ember;
+  }
+
+  .btn-dark {
+    @apply btn bg-slate-deep text-white hover:bg-slate-darker;
+  }
+
+  .btn-outline {
+    @apply btn border border-slate-deep/20 text-slate-deep hover:border-brand-orange hover:text-brand-orange;
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-deep hover:bg-slate-deep/5;
+  }
+
+  .input {
+    @apply w-full rounded-md border border-slate/15 bg-white px-3.5 py-2.5 text-sm text-slate placeholder:text-slate/40 focus:border-brand-orange focus:outline-none focus:ring-2 focus:ring-brand-orange/20;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate/60;
+  }
+
+  .kicker {
+    @apply text-xs font-bold uppercase tracking-[0.25em] text-brand-orange;
+  }
+
+  .card {
+    @apply rounded-xl border border-slate/10 bg-white shadow-card;
+  }
+}
+
+/* Custom scrollbar for admin tables */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  @apply rounded bg-slate/20;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
