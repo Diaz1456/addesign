@@ -3,7 +3,7 @@ services:
     name: aetheria-designs
     runtime: node
     plan: free
-    buildCommand: npx prisma generate && npx prisma db push && npm run db:seed && npm run build
+    buildCommand: npm run db:setup && npm run build
     startCommand: npm start
     healthCheckPath: /
     envVars:
