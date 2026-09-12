@@ -3,7 +3,7 @@ services:
     name: aetheria-designs
     runtime: node
     plan: free
-    buildCommand: npm run db:setup && npm run build
+    buildCommand: npm run render:build
     startCommand: npm start
     healthCheckPath: /
     envVars:

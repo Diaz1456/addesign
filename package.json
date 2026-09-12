@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "render:build": "npm install && npm run db:setup && npm run build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
