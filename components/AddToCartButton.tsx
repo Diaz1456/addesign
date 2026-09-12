@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, Plus, ShoppingBag } from "lucide-react";
 import type { Product } from "@prisma/client";
 import { useCart } from "@/components/cart/CartProvider";
+import { getClientLang, t } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -20,6 +21,7 @@ export function AddToCartButton({
 }: Props) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
+  const lang = getClientLang();
 
   const image =
     product.imageUrls[0] ||
@@ -30,6 +32,7 @@ export function AddToCartButton({
       id: product.id,
       slug: product.slug,
       name: product.name,
+      nameAr: product.nameAr ?? undefined,
       price: product.price,
       image,
     });
@@ -41,7 +44,7 @@ export function AddToCartButton({
     return (
       <button
         onClick={handleClick}
-        aria-label={`Add ${product.name} to cart`}
+        aria-label={`${t(lang, "addToCart")} ${product.name}`}
         className={cn(
           "rounded-md p-2.5 text-white shadow-sm transition hover:bg-brand-ember",
           added ? "bg-green-600" : "bg-brand-orange",
@@ -68,11 +71,11 @@ export function AddToCartButton({
     >
       {added ? (
         <>
-          <Check className="h-4 w-4" /> Added to Cart
+          <Check className="h-4 w-4" /> {t(lang, "addedToCart")}
         </>
       ) : (
         <>
-          <Plus className="h-4 w-4" /> Add to Cart
+          <Plus className="h-4 w-4" /> {t(lang, "addToCart")}
         </>
       )}
     </button>

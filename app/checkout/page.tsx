@@ -4,7 +4,9 @@ import { useState } from "react";
 import { ArrowLeft, CheckCircle2, CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
-import { formatMoney } from "@/lib/utils";
+import { getClientLang, t } from "@/lib/i18n";
+import { pName } from "@/lib/product";
+import { formatMoneyLang } from "@/lib/utils";
 
 const SHIPPING_RATE = 29;
 
@@ -13,6 +15,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [placed, setPlaced] = useState<string | null>(null);
+  const lang = getClientLang();
 
   const shipping = subtotal === 0 || subtotal >= 500 ? 0 : SHIPPING_RATE;
   const tax = Math.round(subtotal * 0.08 * 100) / 100;
@@ -55,14 +58,14 @@ export default function CheckoutPage() {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        setError(data.error || "Something went wrong placing your order.");
+        setError(data.error || t(lang, "orderPlacedError"));
         return;
       }
 
       clearCart();
       setPlaced(data.order.id as string);
     } catch {
-      setError("Network error. Please try again.");
+      setError(t(lang, "orderPlacedError"));
     } finally {
       setLoading(false);
     }
@@ -75,15 +78,14 @@ export default function CheckoutPage() {
           <CheckCircle2 className="h-8 w-8" />
         </span>
         <h1 className="mt-6 text-3xl font-extrabold text-slate-deep">
-          Order confirmed
+          {t(lang, "orderConfirmed")}
         </h1>
         <p className="mt-3 max-w-md text-slate/60">
-          Thank you! Your order{" "}
-          <span className="font-mono font-bold text-slate-deep">#{placed.slice(0, 8)}</span>{" "}
-          has been received. A representative will be in touch shortly.
+          {t(lang, "orderConfirmedBody")}{" "}
+          <span className="font-mono font-bold text-slate-deep">#{placed.slice(0, 8)}</span>
         </p>
         <Link href="/store" className="btn-primary mt-8">
-          Continue Shopping
+          {t(lang, "continueShopping")}
         </Link>
       </div>
     );
@@ -95,71 +97,69 @@ export default function CheckoutPage() {
         href="/cart"
         className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate/60 hover:text-brand-orange"
       >
-        <ArrowLeft className="h-4 w-4" /> Back to cart
+        <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t(lang, "backToCart")}
       </Link>
-      <p className="kicker mt-6">Checkout</p>
+      <p className="kicker mt-6">{t(lang, "checkoutKicker")}</p>
       <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-slate-deep">
-        Place your order
+        {t(lang, "placeOrderTitle")}
       </h1>
       <p className="mt-2 flex items-center gap-2 text-sm text-slate/50">
-        <ShieldCheck className="h-4 w-4 text-brand-orange" /> Secure checkout ·
-        payment is simulated for now
+        <ShieldCheck className="h-4 w-4 text-brand-orange" /> {t(lang, "secureNote")}
       </p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_360px]">
         <form onSubmit={handleSubmit} className="card max-w-2xl p-6 lg:p-8">
-          <h2 className="text-lg font-bold text-slate-deep">Contact</h2>
+          <h2 className="text-lg font-bold text-slate-deep">{t(lang, "contact")}</h2>
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
             <div>
-              <label className="label" htmlFor="name">Full name</label>
+              <label className="label" htmlFor="name">{t(lang, "fullName")}</label>
               <input id="name" name="name" required className="input" placeholder="Alexis Morgan" />
             </div>
             <div>
-              <label className="label" htmlFor="email">Email</label>
+              <label className="label" htmlFor="email">{t(lang, "email")}</label>
               <input id="email" name="email" type="email" required className="input" placeholder="alexis@example.com" />
             </div>
             <div className="sm:col-span-2">
-              <label className="label" htmlFor="phone">Phone</label>
+              <label className="label" htmlFor="phone">{t(lang, "phone")}</label>
               <input id="phone" name="phone" className="input" placeholder="+1 555 010 3000" />
             </div>
           </div>
 
-          <h2 className="mt-8 text-lg font-bold text-slate-deep">Delivery</h2>
+          <h2 className="mt-8 text-lg font-bold text-slate-deep">{t(lang, "delivery")}</h2>
           <div className="mt-5 grid gap-5">
             <div>
-              <label className="label" htmlFor="address">Street address</label>
+              <label className="label" htmlFor="address">{t(lang, "street")}</label>
               <input id="address" name="address" required className="input" placeholder="12 Harvester Lane" />
             </div>
             <div className="grid gap-5 sm:grid-cols-3">
               <div>
-                <label className="label" htmlFor="city">City</label>
+                <label className="label" htmlFor="city">{t(lang, "city")}</label>
                 <input id="city" name="city" required className="input" placeholder="Copenhagen" />
               </div>
               <div>
-                <label className="label" htmlFor="postalCode">Postal code</label>
+                <label className="label" htmlFor="postalCode">{t(lang, "postal")}</label>
                 <input id="postalCode" name="postalCode" className="input" placeholder="1058" />
               </div>
               <div>
-                <label className="label" htmlFor="country">Country</label>
+                <label className="label" htmlFor="country">{t(lang, "country")}</label>
                 <input id="country" name="country" required className="input" placeholder="Denmark" />
               </div>
             </div>
           </div>
 
-          <h2 className="mt-8 text-lg font-bold text-slate-deep">Payment</h2>
+          <h2 className="mt-8 text-lg font-bold text-slate-deep">{t(lang, "payment")}</h2>
           <div className="mt-5 grid gap-5 sm:grid-cols-3">
             <div className="sm:col-span-2">
-              <label className="label" htmlFor="card">Card number (simulated)</label>
+              <label className="label" htmlFor="card">{t(lang, "cardNumber")}</label>
               <input id="card" name="card" inputMode="numeric" placeholder="4242 4242 4242 4242" className="input" />
             </div>
             <div>
-              <label className="label" htmlFor="expiry">Expiry</label>
+              <label className="label" htmlFor="expiry">{t(lang, "expiry")}</label>
               <input id="expiry" name="expiry" placeholder="MM/YY" className="input" />
             </div>
           </div>
           <p className="mt-3 flex items-center gap-2 text-xs text-slate/50">
-            <CreditCard className="h-4 w-4" /> Stripe integration is stubbed —
-            the token fields are saved on the order for later processing.
+            <CreditCard className="h-4 w-4" /> {t(lang, "stripeNote")}
           </p>
 
           {error && (
@@ -175,44 +175,44 @@ export default function CheckoutPage() {
           >
             {loading ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Processing…
+                <Loader2 className="h-4 w-4 animate-spin" /> {t(lang, "processing")}
               </>
             ) : (
-              <>Pay {formatMoney(total)}</>
+              <>{t(lang, "pay")} {formatMoneyLang(total, lang)}</>
             )}
           </button>
         </form>
 
         <aside className="card h-fit p-6">
-          <h2 className="text-lg font-bold text-slate-deep">Summary</h2>
+          <h2 className="text-lg font-bold text-slate-deep">{t(lang, "summary")}</h2>
           <ul className="mt-4 space-y-3">
             {items.map((item) => (
               <li key={item.id} className="flex items-center justify-between gap-3 text-sm">
                 <span className="truncate text-slate/70">
-                  {item.name} × {item.quantity}
+                  {pName(item, lang)} × {item.quantity}
                 </span>
                 <span className="shrink-0 font-semibold">
-                  {formatMoney(item.price * item.quantity)}
+                  {formatMoneyLang(item.price * item.quantity, lang)}
                 </span>
               </li>
             ))}
           </ul>
           <dl className="mt-5 space-y-3 border-t border-slate/10 pt-4 text-sm">
             <div className="flex justify-between">
-              <dt className="text-slate/60">Subtotal</dt>
-              <dd className="font-semibold">{formatMoney(subtotal)}</dd>
+              <dt className="text-slate/60">{t(lang, "subtotal")}</dt>
+              <dd className="font-semibold">{formatMoneyLang(subtotal, lang)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate/60">Shipping</dt>
-              <dd className="font-semibold">{shipping === 0 ? "Free" : formatMoney(shipping)}</dd>
+              <dt className="text-slate/60">{t(lang, "shipping")}</dt>
+              <dd className="font-semibold">{shipping === 0 ? t(lang, "free") : formatMoneyLang(shipping, lang)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate/60">Tax (8%)</dt>
-              <dd className="font-semibold">{formatMoney(tax)}</dd>
+              <dt className="text-slate/60">{t(lang, "tax")}</dt>
+              <dd className="font-semibold">{formatMoneyLang(tax, lang)}</dd>
             </div>
             <div className="flex justify-between border-t border-slate/10 pt-3 text-base">
-              <dt className="font-bold text-slate-deep">Total</dt>
-              <dd className="font-extrabold text-brand-orange">{formatMoney(total)}</dd>
+              <dt className="font-bold text-slate-deep">{t(lang, "total")}</dt>
+              <dd className="font-extrabold text-brand-orange">{formatMoneyLang(total, lang)}</dd>
             </div>
           </dl>
         </aside>

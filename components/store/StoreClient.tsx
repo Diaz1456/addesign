@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LayoutGrid, Search, SlidersHorizontal } from "lucide-react";
 import type { Product } from "@prisma/client";
 import { ProductCard } from "@/components/ProductCard";
+import { getClientLang, catLabel, t } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 interface Category {
@@ -15,23 +16,28 @@ interface Category {
 interface StoreClientProps {
   products: Product[];
   categories: Category[];
+  content: Record<string, string>;
 }
 
 const ALL = "All";
 
-export function StoreClient({ products, categories }: StoreClientProps) {
+export function StoreClient({ products, categories, content }: StoreClientProps) {
   const [active, setActive] = useState<string>(ALL);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<"newest" | "price-asc" | "price-desc">(
     "newest"
   );
+  const lang = getClientLang();
 
   const filtered = useMemo(() => {
-    let list = products.filter(
-      (p) =>
-        (active === ALL || p.category === active) &&
-        p.name.toLowerCase().includes(query.toLowerCase())
-    );
+    let list = products.filter((p) => {
+      const q = query.trim().toLowerCase();
+      const nameMatched =
+        q === "" ||
+        p.name.toLowerCase().includes(q) ||
+        (p.nameAr ?? "").toLowerCase().includes(q);
+      return (active === ALL || p.category === active) && nameMatched;
+    });
     if (sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
     if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     return list;
@@ -42,38 +48,37 @@ export function StoreClient({ products, categories }: StoreClientProps) {
       <div className="container-x">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="kicker">Shop</p>
+            <p className="kicker">{t(lang, "shopKicker")}</p>
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-slate-deep">
-              The Store
+              {t(lang, "storeTitle")}
             </h1>
             <p className="mt-3 max-w-lg text-slate/60">
-              Design objects engineered in our studio and specified in our own
-              projects.
+              {content.storeSubtitle}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate/40" />
+              <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate/40" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search objects…"
-                className="input w-56 pl-9"
-                aria-label="Search products"
+                placeholder={t(lang, "searchPlaceholder")}
+                className="input w-56 ps-9"
+                aria-label={t(lang, "searchPlaceholder")}
               />
             </div>
             <div className="relative">
-              <SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate/40" />
+              <SlidersHorizontal className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate/40" />
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as typeof sort)}
-                className="input w-44 appearance-none pl-9"
-                aria-label="Sort products"
+                className="input w-44 appearance-none ps-9"
+                aria-label={t(lang, "sortNewest")}
               >
-                <option value="newest">Newest</option>
-                <option value="price-asc">Price · Low to High</option>
-                <option value="price-desc">Price · High to Low</option>
+                <option value="newest">{t(lang, "sortNewest")}</option>
+                <option value="price-asc">{t(lang, "sortLowHigh")}</option>
+                <option value="price-desc">{t(lang, "sortHighLow")}</option>
               </select>
             </div>
           </div>
@@ -89,7 +94,7 @@ export function StoreClient({ products, categories }: StoreClientProps) {
                 : "bg-slate/5 text-slate/70 hover:bg-slate/10"
             )}
           >
-            All ({products.length})
+            {t(lang, "all")} ({products.length})
           </button>
           {categories.map((c) => (
             <button
@@ -102,21 +107,21 @@ export function StoreClient({ products, categories }: StoreClientProps) {
                   : "bg-slate/5 text-slate/70 hover:bg-slate/10"
               )}
             >
-              {c.name} ({c.count})
+              {catLabel(lang, c.name)} ({c.count})
             </button>
           ))}
         </div>
 
         <div className="mt-4 flex items-center gap-2 text-sm text-slate/50">
           <LayoutGrid className="h-4 w-4" />
-          {filtered.length} {filtered.length === 1 ? "product" : "products"}
+          {filtered.length} {filtered.length === 1 ? t(lang, "product") : t(lang, "products")}
         </div>
 
         {filtered.length === 0 ? (
           <div className="py-24 text-center">
-            <p className="font-semibold text-slate">No products match.</p>
+            <p className="font-semibold text-slate">{t(lang, "noMatches")}</p>
             <p className="mt-1 text-sm text-slate/50">
-              Try another category or search term.
+              {t(lang, "noMatchesBody")}
             </p>
           </div>
         ) : (

@@ -13,7 +13,7 @@ export default async function AdminPanelLayout({
   if (!user) redirect("/admin/login");
 
   return (
-    <div className="flex min-h-screen bg-snow">
+    <div className="flex min-h-screen bg-snow" dir="ltr" lang="en">
       <AdminSidebar user={user} />
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="min-h-screen px-6 py-8 lg:px-10">{children}</div>

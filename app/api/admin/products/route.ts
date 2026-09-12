@@ -29,7 +29,9 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}));
 
   const name = String(body.name ?? "").trim();
+  const nameAr = body.nameAr ? String(body.nameAr).trim() : null;
   const description = String(body.description ?? "").trim();
+  const descriptionAr = body.descriptionAr ? String(body.descriptionAr).trim() : null;
   const price = Number(body.price);
   const category = String(body.category ?? "").trim();
   const featured = Boolean(body.featured);
@@ -68,8 +70,10 @@ export async function POST(request: Request) {
     const product = await prisma.product.create({
       data: {
         name,
+        nameAr,
         slug,
         description,
+        descriptionAr,
         price,
         category,
         featured,

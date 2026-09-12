@@ -2,11 +2,16 @@
 
 import { usePathname } from "next/navigation";
 import { SiteHeader } from "./SiteHeader";
-import { SiteFooter } from "./SiteFooter";
 import { CartDrawer } from "./cart/CartDrawer";
 import { AnalyticsTracker } from "./AnalyticsTracker";
 
-export function AppChrome({ children }: { children: React.ReactNode }) {
+export function AppChrome({
+  children,
+  footer,
+}: {
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+}) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
 
@@ -18,7 +23,7 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
     <>
       <SiteHeader />
       <main className="flex-1">{children}</main>
-      <SiteFooter />
+      {footer}
       <CartDrawer />
       <AnalyticsTracker />
     </>

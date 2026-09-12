@@ -25,8 +25,20 @@ export async function PUT(request: Request, { params }: Params) {
   }
 
   const name = String(body.name ?? existing.name).trim() || existing.name;
+  const nameAr =
+    body.nameAr === undefined
+      ? existing.nameAr
+      : body.nameAr
+      ? String(body.nameAr).trim()
+      : null;
   const description =
     String(body.description ?? existing.description).trim() || existing.description;
+  const descriptionAr =
+    body.descriptionAr === undefined
+      ? existing.descriptionAr
+      : body.descriptionAr
+      ? String(body.descriptionAr).trim()
+      : null;
   const price = body.price !== undefined ? Number(body.price) : existing.price;
   const category = String(body.category ?? existing.category).trim() || existing.category;
   const featured =
@@ -63,7 +75,7 @@ export async function PUT(request: Request, { params }: Params) {
 
     const product = await prisma.product.update({
       where: { id },
-      data: { name, slug, description, price, category, featured, stock, imageUrls },
+      data: { name, nameAr, slug, description, descriptionAr, price, category, featured, stock, imageUrls },
     });
     return NextResponse.json({ product });
   } catch {

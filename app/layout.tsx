@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { Suspense } from "react";
 import "./globals.css";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { AppChrome } from "@/components/AppChrome";
+import { SiteFooter } from "@/components/SiteFooter";
+import { LANG_COOKIE, normalizeLang } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: {
@@ -17,11 +21,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const lang = normalizeLang(cookies().get(LANG_COOKIE)?.value);
+  const dir = lang === "ar" ? "rtl" : "ltr";
+
   return (
-    <html lang="en">
+    <html lang={lang} dir={dir}>
       <body className="flex min-h-screen flex-col">
         <CartProvider>
-          <AppChrome>{children}</AppChrome>
+          <AppChrome footer={<Suspense fallback={null}><SiteFooter /></Suspense>}>
+            {children}
+          </AppChrome>
         </CartProvider>
       </body>
     </html>

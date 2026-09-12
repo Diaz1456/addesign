@@ -1,7 +1,13 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { Instagram, Linkedin, Mail, MapPin, Twitter } from "lucide-react";
+import { getContent } from "@/lib/content";
+import { LANG_COOKIE, normalizeLang, t } from "@/lib/i18n";
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const lang = normalizeLang(cookies().get(LANG_COOKIE)?.value);
+  const content = await getContent(lang);
+
   return (
     <footer className="bg-slate-darker text-snow/70">
       <div className="container-x py-14">
@@ -16,13 +22,12 @@ export function SiteFooter() {
                 </svg>
               </span>
               <span className="text-lg font-extrabold tracking-tight text-white">
-                Aetheria<span className="text-brand-orange">.</span>
+                {content.siteName}
+                <span className="text-brand-orange">.</span>
               </span>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed">
-              A full-service engineering and design firm. We shape exterior
-              architecture, choreograph interiors, and manufacture the pieces
-              that make spaces feel intent.
+              {content.footerAbout}
             </p>
             <div className="mt-6 flex gap-3">
               {[Instagram, Twitter, Linkedin].map((Icon, i) => (
@@ -30,7 +35,7 @@ export function SiteFooter() {
                   key={i}
                   href="#"
                   className="rounded-md bg-white/5 p-2 transition hover:bg-brand-orange hover:text-white"
-                  aria-label="Social link"
+                  aria-label={t(lang, "explore")}
                 >
                   <Icon className="h-4 w-4" />
                 </a>
@@ -40,30 +45,28 @@ export function SiteFooter() {
 
           <div>
             <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-white">
-              Explore
+              {t(lang, "explore")}
             </h3>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/store" className="transition hover:text-white">Store</Link></li>
-              <li><Link href="/#projects" className="transition hover:text-white">Projects</Link></li>
-              <li><Link href="/contact" className="transition hover:text-white">Contact</Link></li>
-              <li><Link href="/admin/login" className="transition hover:text-white">Admin</Link></li>
+              <li><Link href="/store" className="transition hover:text-white">{t(lang, "navStore")}</Link></li>
+              <li><Link href="/#projects" className="transition hover:text-white">{t(lang, "navProjects")}</Link></li>
+              <li><Link href="/contact" className="transition hover:text-white">{t(lang, "navContact")}</Link></li>
+              <li><Link href="/admin/login" className="transition hover:text-white">{t(lang, "adminLabel")}</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-white">
-              Studio
+              {t(lang, "studioLabel")}
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
-                Level 4, Helios Works,
-                <br />
-                Copenhagen, Denmark
+                {content.footerAddress}
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0 text-brand-orange" />
-                hello@aetheria.design
+                {content.contactEmail}
               </li>
             </ul>
           </div>
@@ -71,8 +74,8 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-white/10">
         <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-xs text-snow/40 md:flex-row">
-          <p>© {new Date().getFullYear()} Aetheria Designs. All rights reserved.</p>
-          <p>Engineered with intent · Built on light.</p>
+          <p>© {new Date().getFullYear()} {content.siteName}. {t(lang, "rights")}</p>
+          <p>{content.footerTagline}</p>
         </div>
       </div>
     </footer>

@@ -1,6 +1,7 @@
 :root {
   --font-inter: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    "Helvetica Neue", Arial, "Noto Kufi Arabic", "Tajawal", "Tahoma",
+    sans-serif;
 }
 
 @tailwind base;
@@ -14,6 +15,21 @@
 
   body {
     @apply bg-snow text-slate antialiased;
+  }
+
+  /* Arabic (RTL) readability */
+  [dir="rtl"] body {
+    line-height: 1.7;
+  }
+
+  [dir="rtl"] .kicker,
+  [dir="rtl"] .label {
+    letter-spacing: 0.02em;
+  }
+
+  [dir="rtl"] .tracking-widest,
+  [dir="rtl"] [class*="tracking-"][class*="em"] {
+    letter-spacing: 0.01em;
   }
 }
 

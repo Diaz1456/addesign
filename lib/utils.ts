@@ -16,6 +16,14 @@ export function formatMoney(value: number): string {
   return formatter.format(value);
 }
 
+export function formatMoneyLang(value: number, lang: "en" | "ar"): string {
+  const fmt = new Intl.NumberFormat(lang === "ar" ? "ar-EG" : "en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  return fmt.format(value);
+}
+
 export function formatDate(value: Date | string): string {
   const d = typeof value === "string" ? new Date(value) : value;
   return d.toLocaleDateString("en-US", {

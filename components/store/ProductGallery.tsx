@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { getClientLang, t } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export function ProductGallery({ images, alt }: { images: string[]; alt: string }) {
   const [active, setActive] = useState(0);
+  const lang = getClientLang();
   const list = images.length > 0 ? images : [""];
 
   return (
@@ -15,7 +17,7 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
           <motion.img
             key={active}
             src={list[active]}
-            alt={`${alt} — view ${active + 1}`}
+            alt={`${alt} — ${t(lang, "viewImage")} ${active + 1}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -23,7 +25,7 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
             className="h-full w-full object-cover"
           />
         </AnimatePresence>
-        <span className="absolute right-4 top-4 rounded-full bg-slate-darker/70 px-3 py-1 text-xs font-bold text-white backdrop-blur">
+        <span className="absolute end-4 top-4 rounded-full bg-slate-darker/70 px-3 py-1 text-xs font-bold text-white backdrop-blur">
           {active + 1} / {list.length}
         </span>
       </div>
@@ -40,7 +42,7 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
                   ? "border-brand-orange"
                   : "border-transparent opacity-60 hover:opacity-100"
               )}
-              aria-label={`View image ${i + 1}`}
+              aria-label={`${t(lang, "viewImage")} ${i + 1}`}
             >
               <img src={src} alt="" className="h-full w-full object-cover" />
             </button>

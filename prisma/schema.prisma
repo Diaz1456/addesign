@@ -17,18 +17,20 @@ model User {
 }
 
 model Product {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  slug        String      @unique
-  description String
-  price       Float
-  category    String
-  imageUrls   String[]
-  featured    Boolean     @default(false)
-  stock       Int         @default(10)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  OrderItem   OrderItem[]
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  nameAr       String?
+  description  String
+  descriptionAr String?
+  slug         String      @unique
+  price        Float
+  category     String
+  imageUrls    String[]
+  featured     Boolean     @default(false)
+  stock        Int         @default(10)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  OrderItem    OrderItem[]
 }
 
 model OrderItem {
@@ -77,4 +79,10 @@ model Analytics {
 
   @@index([sessionId])
   @@index([timestamp])
+}
+
+model SiteSetting {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  key   String @unique
+  value String
 }

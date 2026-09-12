@@ -2,14 +2,22 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpLeft, MoveLeft, MoveRight } from "lucide-react";
+import { ArrowRight, MoveLeft, MoveRight } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Product } from "@prisma/client";
+import { getClientLang, t } from "@/lib/i18n";
 import { ProductCard } from "./ProductCard";
 
-export function BestSellers({ products }: { products: Product[] }) {
+export function BestSellers({
+  products,
+  content,
+}: {
+  products: Product[];
+  content: Record<string, string>;
+}) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [canScroll, setCanScroll] = useState({ left: false, right: true });
+  const lang = getClientLang();
 
   const updateScrollState = () => {
     const el = trackRef.current;
@@ -31,9 +39,9 @@ export function BestSellers({ products }: { products: Product[] }) {
       <div className="container-x">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="kicker">The Collection</p>
+            <p className="kicker">{content.collectionKicker}</p>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-deep sm:text-4xl">
-              Best Sellers
+              {content.bestSellersTitle}
             </h2>
           </div>
           <div className="flex items-center gap-3">
@@ -42,7 +50,7 @@ export function BestSellers({ products }: { products: Product[] }) {
                 onClick={() => scroll("left")}
                 disabled={!canScroll.left}
                 className="rounded-md border border-slate/20 p-2 text-slate disabled:opacity-30"
-                aria-label="Scroll left"
+                aria-label={t(lang, "scrollLeft")}
               >
                 <MoveLeft className="h-4 w-4" />
               </button>
@@ -50,7 +58,7 @@ export function BestSellers({ products }: { products: Product[] }) {
                 onClick={() => scroll("right")}
                 disabled={!canScroll.right}
                 className="rounded-md border border-slate/20 p-2 text-slate disabled:opacity-30"
-                aria-label="Scroll right"
+                aria-label={t(lang, "scrollRight")}
               >
                 <MoveRight className="h-4 w-4" />
               </button>
@@ -59,8 +67,8 @@ export function BestSellers({ products }: { products: Product[] }) {
               href="/store"
               className="group inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange"
             >
-              Shop all
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              {content.shopAll}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180" />
             </Link>
           </div>
         </div>

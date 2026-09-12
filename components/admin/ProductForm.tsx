@@ -24,7 +24,9 @@ export function ProductForm({ product }: Props) {
   const fileInput = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(product?.name ?? "");
+  const [nameAr, setNameAr] = useState(product?.nameAr ?? "");
   const [description, setDescription] = useState(product?.description ?? "");
+  const [descriptionAr, setDescriptionAr] = useState(product?.descriptionAr ?? "");
   const [price, setPrice] = useState(product ? String(product.price) : "");
   const [category, setCategory] = useState(product?.category ?? "Interior");
   const [stock, setStock] = useState(product ? String(product.stock) : "10");
@@ -80,7 +82,9 @@ export function ProductForm({ product }: Props) {
 
     const payload = {
       name,
+      nameAr: nameAr || null,
       description,
+      descriptionAr: descriptionAr || null,
       price: Number(price),
       category,
       stock: Number(stock),
@@ -133,6 +137,20 @@ export function ProductForm({ product }: Props) {
               />
             </div>
             <div>
+              <label className="label" htmlFor="nameAr">
+                Name (Arabic, optional)
+              </label>
+              <input
+                id="nameAr"
+                value={nameAr}
+                onChange={(e) => setNameAr(e.target.value)}
+                className="input"
+                dir="rtl"
+                lang="ar"
+                placeholder="مثال: لوح واجهة بارامتري"
+              />
+            </div>
+            <div>
               <label className="label" htmlFor="description">Description</label>
               <textarea
                 id="description"
@@ -142,6 +160,21 @@ export function ProductForm({ product }: Props) {
                 onChange={(e) => setDescription(e.target.value)}
                 className="input resize-none"
                 placeholder="Materials, dimensions, finish details, and the story of the piece…"
+              />
+            </div>
+            <div>
+              <label className="label" htmlFor="descriptionAr">
+                Description (Arabic, optional)
+              </label>
+              <textarea
+                id="descriptionAr"
+                rows={5}
+                value={descriptionAr}
+                onChange={(e) => setDescriptionAr(e.target.value)}
+                className="input resize-none"
+                dir="rtl"
+                lang="ar"
+                placeholder="المواد، الأبعاد، وكل ما يخص القطعة…"
               />
             </div>
             <div className="grid gap-5 sm:grid-cols-3">

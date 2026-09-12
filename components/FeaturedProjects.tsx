@@ -37,23 +37,23 @@ const PROJECTS: Project[] = [
   },
 ];
 
-export function FeaturedProjects() {
+export function FeaturedProjects({ content }: { content: Record<string, string> }) {
   return (
     <section id="projects" className="py-20 lg:py-28">
       <div className="container-x">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="kicker">Selected Work</p>
+            <p className="kicker">{content.projectsKicker}</p>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-deep sm:text-4xl">
-              Featured Projects
+              {content.projectsTitle}
             </h2>
           </div>
           <Link
             href="/store"
             className="group inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange"
           >
-            See objects from these projects
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            {content.projectsCta}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180" />
           </Link>
         </div>
 

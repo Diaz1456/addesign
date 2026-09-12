@@ -1,10 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import type { Product } from "@prisma/client";
-import { formatMoney } from "@/lib/utils";
+import { getClientLang, catLabel } from "@/lib/i18n";
+import { pName } from "@/lib/product";
+import { formatMoneyLang } from "@/lib/utils";
 import { AddToCartButton } from "./AddToCartButton";
 
 export function ProductCard({ product }: { product: Product }) {
   const image = product.imageUrls[0];
+  const lang = getClientLang();
+  const name = pName(product, lang);
 
   return (
     <div className="group card relative overflow-hidden transition-shadow hover:shadow-lg">
@@ -13,7 +19,7 @@ export function ProductCard({ product }: { product: Product }) {
           {image ? (
             <img
               src={image}
-              alt={product.name}
+              alt={name}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
@@ -28,18 +34,18 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </Link>
       <span className="absolute left-4 top-4 rounded-full bg-slate-darker/80 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white backdrop-blur">
-        {product.category}
+        {catLabel(lang, product.category)}
       </span>
 
       <div className="p-5">
         <Link href={`/product/${product.slug}`}>
           <h3 className="font-bold text-slate-deep transition-colors group-hover:text-brand-orange">
-            {product.name}
+            {name}
           </h3>
         </Link>
         <div className="mt-3 flex items-center justify-between">
           <span className="text-lg font-extrabold text-slate-deep">
-            {formatMoney(product.price)}
+            {formatMoneyLang(product.price, lang)}
           </span>
           <AddToCartButton product={product} iconOnly display="icon" />
         </div>

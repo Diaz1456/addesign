@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-slate-darker px-4 py-12">
+    <div dir="ltr" lang="en" className="relative flex min-h-screen items-center justify-center bg-slate-darker px-4 py-12">
       <div className="absolute inset-0 opacity-20 [background:radial-gradient(circle_at_50%_0%,rgba(217,108,44,0.6),transparent_50%)]" />
       <div className="relative w-full max-w-md">
         <div className="mb-8 text-center">

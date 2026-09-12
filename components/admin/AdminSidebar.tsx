@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   ChartColumnBig,
   ClipboardList,
+  Globe,
   LayoutDashboard,
   LogOut,
   MessageSquareText,
@@ -16,6 +17,7 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/content", label: "Site Content", icon: Globe },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/orders", label: "Orders", icon: ClipboardList },
   { href: "/admin/feedback", label: "Feedback", icon: MessageSquareText },
