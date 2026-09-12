@@ -9,3 +9,5 @@ next-env.d.ts
 prisma/dev.db
 prisma/dev.db-journal
 .DS_Store
+# Contains a live credential — do not commit.
+DEPLOY.md
